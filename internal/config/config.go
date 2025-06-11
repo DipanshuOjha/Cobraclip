@@ -1,63 +1,39 @@
-package main
+package config
 
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-
-	"github.com/spf13/viper"
 )
 
 type Config struct {
-	gittoken string
+	GitToken string
 }
 
-func loadconfig() (*Config, error) {
-	homedir, err := os.UserHomeDir()
+func LoadConfig() (*Config, error) {
+	token := os.Getenv("COBRACLIP_GIT_TOKEN")
+	//fmt.Printf("DEBUG: Loading config: COBRACLIP_GIT_TOKEN=%s\n", token)
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to get homedir", err)
+	if token == "" {
+		return nil, fmt.Errorf("no token found in COBRACLIP_GIT_TOKEN; please run 'cobraclip login'")
 	}
-
-	configdir := filepath.Join(homedir, ".cobraclip")
-	filepath.Join(configdir, "config.yaml")
-
-	viper.SetConfigFile("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(configdir)
-
-	viper.SetDefault("git_token", "")
-
-	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return nil, fmt.Errorf("failed to read config: %w", err)
-		}
-		if err := os.MkdirAll(configdir, 0700); err != nil {
-			return nil, fmt.Errorf("failed to create config directory: %w", err)
-		}
-	}
-
-	viper.SetEnvPrefix("cobraclip")
-	viper.BindEnv("git_token")
-	viper.AutomaticEnv()
 
 	cfg := &Config{
-		gittoken: viper.GetString("git_token"),
+		GitToken: token,
 	}
-
 	return cfg, nil
 }
 
-func saveToken(token string) error {
-	viper.Set("git_token", token)
+// func SaveToken(token string) error {
 
-	if err := viper.WriteConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			return viper.SafeWriteConfig()
-		}
+// 	viper.Set("git_token", token)
 
-		return fmt.Errorf("failed to write into config.yaml", err)
-	}
+// 	// if err := viper.WriteConfig(); err != nil {
+// 	// 	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+// 	// 		return viper.SafeWriteConfig()
+// 	// 	}
 
-	return nil
-}
+// 	// 	return fmt.Errorf("failed to write into config.yaml")
+// 	// }
+
+// 	return nil
+// }
