@@ -4,10 +4,15 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/DipanshuOjha/cobraclip/detaillog"
 	"github.com/DipanshuOjha/cobraclip/internal/config"
 	"github.com/google/go-github/v62/github"
 	"github.com/spf13/cobra"
@@ -20,11 +25,12 @@ var (
 
 // searchByOrgCmd represents the searchByOrg command
 var searchByOrgCmd = &cobra.Command{
-	Use:   "Search Repository",
+	Use:   "SearchByOrg",
 	Short: "Search Github Repository by Organisation",
 	Long: `
 	   parameter that are to search repositories within an organisation
-	                --org or -o name of organisation 
+	                --org or -o name of organisation (Required)
+					--cnt or -c Number of repos you want to print
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg, err := config.LoadConfig()
@@ -79,13 +85,26 @@ var searchByOrgCmd = &cobra.Command{
 			fmt.Printf("   Description: %s\n", desc)
 			fmt.Printf("   Stars: %d\n", *repo.StargazersCount)
 			fmt.Printf("   URL: %s\n", *repo.HTMLURL)
-			time.Sleep(time.Millisecond * 500)
+			time.Sleep(time.Millisecond * 700)
 			if i+1 == cnt {
 				break
 			}
 		}
 
-		fmt.Println("That all Repos")
+		reader := bufio.NewReader(os.Stdin)
+
+		for {
+			fmt.Println("That all Repos any perticular repository you want to look? just tell me the index number you see:- ")
+			input, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Println("What you said i didnt read try again")
+				continue
+
+			}
+			num, _ := strconv.Atoi(strings.TrimSpace(input))
+
+			detaillog.ShowRepoDetail(AllRepos[num-1], client)
+		}
 
 	},
 }

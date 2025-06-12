@@ -18,6 +18,7 @@ var repoCmd = &cobra.Command{
 		 1. Make a new Github Repository 
 		 2. Fork a repository 
 		 3. clone a repo 
+		 4. Search repo by Organisation
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("repo called")
