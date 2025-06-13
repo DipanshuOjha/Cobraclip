@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DipanshuOjha/cobraclip/detaillog"
+	"github.com/DipanshuOjha/cobraclip/functions/detaillog"
 	"github.com/DipanshuOjha/cobraclip/internal/config"
 	"github.com/google/go-github/v62/github"
 	"github.com/spf13/cobra"
@@ -101,6 +101,7 @@ var searchByOrgCmd = &cobra.Command{
 				continue
 
 			}
+
 			num, _ := strconv.Atoi(strings.TrimSpace(input))
 
 			detaillog.ShowRepoDetail(AllRepos[num-1], client)

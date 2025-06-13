@@ -37,14 +37,14 @@ var loginCmd = &cobra.Command{
 		//fmt.Println("you are here")
 
 		if err != nil {
-			fmt.Printf("Error reading token try again \n%w", err)
+			fmt.Printf("Error reading token try again \n%v", err)
 			return
 		}
 		token := strings.TrimSpace(string((tokenbyte)))
 		fmt.Println()
 
 		if token == "" {
-			fmt.Printf("token should not be empty \n%w", err)
+			fmt.Printf("token should not be empty \n%v", err)
 			return
 		}
 
