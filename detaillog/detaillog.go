@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/DipanshuOjha/cobraclip/functions/fork"
 	"github.com/google/go-github/v62/github"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -27,7 +28,66 @@ var repoMenu = []struct {
 	{"6", "Closed Issues", showClosedIssues},
 	{"7", "Pull Requests", showPullRequests},
 	{"8", "Contributors", showContributors},
+	{"9", "Fork", forkit},
 	{"q", "Quit", nil},
+}
+
+// type ForkStage string
+
+// type ForkProgress struct {
+// 	Stage ForkStage
+// 	Repo  *github.Repository
+// 	Error error
+// 	Tips  string // Helpful tips for long waits
+// }
+
+// const (
+// 	StageStarting       ForkStage = "Starting fork..."
+// 	StageCheckingExists ForkStage = "Checking if fork already exists..."
+// 	StageCreating       ForkStage = "Creating fork (this may take a few minutes)..."
+// 	StageVerifying      ForkStage = "Verifying fork content..."
+// 	StageDone           ForkStage = "Fork ready! 🎉"
+// 	StageFailed         ForkStage = "Fork failed ❌"
+// )
+
+func forkit(repo *github.Repository, client *github.Client) {
+	updates := make(chan fork.ForkProgress, 10)
+
+	go func() {
+		_, err := fork.ForkRepo(repo, client, updates)
+		if err != nil {
+			fmt.Println("Error:", err)
+		}
+	}()
+
+	// Display updates in real-time
+	for progress := range updates {
+		clearScreen() // Optional: Clears console for cleaner output
+
+		fmt.Printf("\n🔹 %s\n", progress.Stage)
+		if progress.Tips != "" {
+			fmt.Printf("   💡 %s\n", progress.Tips)
+		}
+
+		for progress := range updates {
+			// Use the package's stage constants
+			switch progress.Stage {
+			case fork.StageStarting:
+				fmt.Println("Starting fork operation...")
+			case fork.StageCheckingExists:
+				fmt.Println("Checking for existing fork...")
+			case fork.StageCreating:
+				fmt.Println("Creating fork...")
+			case fork.StageVerifying:
+				fmt.Println("Verifying content...")
+			case fork.StageDone:
+				fmt.Printf("✅ Fork ready: %s\n", progress.Repo.GetHTMLURL())
+			case fork.StageFailed:
+				fmt.Printf("❌ Error: %v\n", progress.Error)
+			}
+		}
+	}
+
 }
 
 func showBasicInfo(repo *github.Repository) {
@@ -64,7 +124,7 @@ func ShowRepoDetail(repo *github.Repository, client *github.Client) {
 			if items.key == choice {
 				clearScreen()
 				showBasicInfo(repo)
-				fmt.Println("\n=== %s ===\n", items.description)
+				fmt.Printf("\n=== %s ===\n", items.description)
 				items.handler(repo, client)
 				fmt.Print("\nPress Enter to continue...")
 				reader.ReadString('\n')
@@ -80,7 +140,11 @@ func showLanguages(repo *github.Repository, client *github.Client) {
 
 	ctx := context.Background()
 
-	langs, _, _ := client.Repositories.ListLanguages(ctx, owner, name)
+	langs, _, err := client.Repositories.ListLanguages(ctx, owner, name)
+	if err != nil {
+		fmt.Println("failed to list languages:")
+		return
+	}
 	fmt.Println("\n\033[1mLanguages:\033[0m")
 	for lang := range langs {
 		fmt.Printf("- %s\n", lang)
