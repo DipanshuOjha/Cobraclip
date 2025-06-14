@@ -26,12 +26,9 @@ var (
 var listmyrepoCmd = &cobra.Command{
 	Use:   "listMyRepo",
 	Short: "a command to list personal repos",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `
+	        We have the following flags for listing personal repository
+			  --cnt -c for total number for repository to display`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg, err := config.LoadConfig()
 		if err != nil {
@@ -130,5 +127,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	listmyrepoCmd.Flags().IntVarP(&cntforrepo, "count", "c", 10000000, "Help message for toggle")
+	listmyrepoCmd.Flags().IntVarP(&cntforrepo, "count", "c", 10000000, "no. of repository")
 }

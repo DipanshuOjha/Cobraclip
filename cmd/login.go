@@ -5,8 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 	"syscall"
 
@@ -48,24 +46,16 @@ var loginCmd = &cobra.Command{
 			return
 		}
 
-		// Set the environment variable for the current session
-		if err := os.Setenv("COBRACLIP_GIT_TOKEN", token); err != nil {
-			fmt.Printf("Error setting environment variable: %v\n", err)
+		err = config.SaveToken(token)
+		if err != nil {
+			fmt.Printf("❌ Failed to save token securely: %v\n", err)
 			return
 		}
 
-		// Set the environment variable persistently for the user
-		psCommand := fmt.Sprintf(`[Environment]::SetEnvironmentVariable("COBRACLIP_GIT_TOKEN", "%s", "User"); exit $LASTEXITCODE`, token)
-		cmdExec := exec.Command("powershell", "-NoProfile", "-Command", psCommand)
-		output, err := cmdExec.CombinedOutput()
-		if err != nil {
-			fmt.Printf("Warning: Failed to set persistent environment variable: %v\nOutput: %s\n", err, string(output))
-			fmt.Println("Token is set for this session only. To persist, run:")
-			fmt.Println(`powershell -Command "[Environment]::SetEnvironmentVariable('COBRACLIP_GIT_TOKEN', '` + token + `', 'User')"`)
-			fmt.Println("Then open a new PowerShell session.")
+		if config.HasToken() {
+			fmt.Println("✅ Token is saved securely in your system keyring.")
 		} else {
-			fmt.Println("Token saved persistently in COBRACLIP_GIT_TOKEN")
-			fmt.Println("Open a new PowerShell session for it to take effect in other commands.")
+			fmt.Println("❌ No token found. Please run 'cobraclip login'.")
 		}
 
 		// Verify by loading config

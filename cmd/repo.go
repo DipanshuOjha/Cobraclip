@@ -19,6 +19,7 @@ var repoCmd = &cobra.Command{
 		 2. Fork a repository 
 		 3. clone a repo 
 		 4. Search repo by Organisation
+		 5. List all your Repos
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("repo called")

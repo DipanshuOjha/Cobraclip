@@ -3,24 +3,44 @@ package config
 import (
 	"fmt"
 	"os"
+
+	"github.com/zalando/go-keyring"
 )
 
 type Config struct {
 	GitToken string
 }
 
+const (
+	service = "cobraclip"
+	user    = "github-pat"
+)
+
 func LoadConfig() (*Config, error) {
-	token := os.Getenv("COBRACLIP_GIT_TOKEN")
+	token, err := keyring.Get(service, user)
+	if err == nil {
+		return &Config{GitToken: token}, nil
+	}
+	envtoken := os.Getenv("COBRACLIP_GIT_TOKEN")
 	//fmt.Printf("DEBUG: Loading config: COBRACLIP_GIT_TOKEN=%s\n", token)
 
-	if token == "" {
+	if envtoken == "" {
 		return nil, fmt.Errorf("no token found in COBRACLIP_GIT_TOKEN; please run 'cobraclip login'")
 	}
 
 	cfg := &Config{
-		GitToken: token,
+		GitToken: envtoken,
 	}
 	return cfg, nil
+}
+
+func SaveToken(token string) error {
+	return keyring.Set(service, user, token)
+}
+
+func HasToken() bool {
+	_, err := keyring.Get(service, user)
+	return err == nil
 }
 
 // func SaveToken(token string) error {
