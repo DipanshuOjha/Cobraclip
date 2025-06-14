@@ -43,6 +43,14 @@ func HasToken() bool {
 	return err == nil
 }
 
+func SendToken() (string, error) {
+	return keyring.Get(service, user)
+}
+
+func RemoveToken(token string) error {
+	return keyring.Delete(service, user)
+}
+
 // func SaveToken(token string) error {
 
 // 	viper.Set("git_token", token)
