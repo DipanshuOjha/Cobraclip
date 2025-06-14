@@ -62,7 +62,7 @@ func forkit(repo *github.Repository, client *github.Client) {
 
 	// Display updates in real-time
 	for progress := range updates {
-		clearScreen() // Optional: Clears console for cleaner output
+		ClearScreen() // Optional: Clears console for cleaner output
 
 		fmt.Printf("\n🔹 %s\n", progress.Stage)
 		if progress.Tips != "" {
@@ -92,15 +92,15 @@ func forkit(repo *github.Repository, client *github.Client) {
 
 func displayrepodetails(repo *github.Repository, client *github.Client, index int, reader *bufio.Reader) {
 	items := repoMenu[index]
-	clearScreen()
-	showBasicInfo(repo)
+	ClearScreen()
+	ShowBasicInfo(repo)
 	fmt.Printf("\n=== %s ===\n", items.description)
 	items.handler(repo, client)
 	fmt.Print("\nPress Enter to continue...")
 	reader.ReadString('\n')
 }
 
-func showBasicInfo(repo *github.Repository) {
+func ShowBasicInfo(repo *github.Repository) {
 	fmt.Printf("\n\033[1m%s/%s\033[0m\n", *repo.Owner.Login, *repo.Name)
 	fmt.Printf("📝 %s\n", safeString(repo.Description))
 	fmt.Printf("🌐 %s\n", *repo.HTMLURL)
@@ -112,8 +112,8 @@ func ShowRepoDetail(repo *github.Repository, client *github.Client) {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		clearScreen()
-		showBasicInfo(repo)
+		ClearScreen()
+		ShowBasicInfo(repo)
 
 		fmt.Printf("What would you like to check\n")
 
@@ -372,7 +372,7 @@ func printPRSummary(pr *github.PullRequest) {
 	}
 }
 
-func clearScreen() {
+func ClearScreen() {
 	fmt.Print("\033[H\033[2J")
 }
 

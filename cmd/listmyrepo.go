@@ -4,10 +4,15 @@ Copyright © 2025 Dipanshu Ojha
 package cmd
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
+	optionsforuser "github.com/DipanshuOjha/cobraclip/functions/optionsForUser"
 	"github.com/DipanshuOjha/cobraclip/internal/config"
 	"github.com/google/go-github/v62/github"
 	"github.com/spf13/cobra"
@@ -85,6 +90,30 @@ to quickly create a Cobra application.`,
 			fmt.Printf("   URL: %s\n", *repo.HTMLURL)
 			fmt.Println()
 			time.Sleep(time.Millisecond * 500)
+		}
+
+		reader := bufio.NewReader(os.Stdin)
+
+		for {
+			fmt.Println("That all your repo looking to checkout a repo then enter its index here or enter q to free the terminal:-")
+			input, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Println("What you said i didnt read try again")
+				continue
+			}
+
+			num, err := strconv.Atoi(strings.TrimSpace(input))
+
+			if err != nil {
+				break
+			}
+
+			if num > len(repos) || num <= 0 {
+				fmt.Printf("Enter within the range")
+				continue
+			}
+
+			optionsforuser.Options(repos[num-1], client)
 		}
 
 	},

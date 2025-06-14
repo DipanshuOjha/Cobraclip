@@ -102,7 +102,16 @@ var searchByOrgCmd = &cobra.Command{
 
 			}
 
-			num, _ := strconv.Atoi(strings.TrimSpace(input))
+			num, err := strconv.Atoi(strings.TrimSpace(input))
+
+			if err != nil {
+				break
+			}
+
+			if num > len(AllRepos) || num <= 0 {
+				fmt.Printf("Enter within the range")
+				continue
+			}
 
 			detaillog.ShowRepoDetail(AllRepos[num-1], client)
 		}
