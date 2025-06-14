@@ -90,6 +90,16 @@ func forkit(repo *github.Repository, client *github.Client) {
 
 }
 
+func displayrepodetails(repo *github.Repository, client *github.Client, index int, reader *bufio.Reader) {
+	items := repoMenu[index]
+	clearScreen()
+	showBasicInfo(repo)
+	fmt.Printf("\n=== %s ===\n", items.description)
+	items.handler(repo, client)
+	fmt.Print("\nPress Enter to continue...")
+	reader.ReadString('\n')
+}
+
 func showBasicInfo(repo *github.Repository) {
 	fmt.Printf("\n\033[1m%s/%s\033[0m\n", *repo.Owner.Login, *repo.Name)
 	fmt.Printf("📝 %s\n", safeString(repo.Description))
@@ -120,16 +130,41 @@ func ShowRepoDetail(repo *github.Repository, client *github.Client) {
 			break
 		}
 
-		for _, items := range repoMenu {
-			if items.key == choice {
-				clearScreen()
-				showBasicInfo(repo)
-				fmt.Printf("\n=== %s ===\n", items.description)
-				items.handler(repo, client)
-				fmt.Print("\nPress Enter to continue...")
-				reader.ReadString('\n')
-				break
-			}
+		//if choice != "1" || choice != "2" || choice != "3" || choice != "4" || choice != "5" || choice != "6" || choice != "7" || choice != "8" || choice!= "9"
+
+		// for _, items := range repoMenu {
+		// 	if items.key == choice {
+		// 		clearScreen()
+		// 		showBasicInfo(repo)
+		// 		fmt.Printf("\n=== %s ===\n", items.description)
+		// 		items.handler(repo, client)
+		// 		fmt.Print("\nPress Enter to continue...")
+		// 		reader.ReadString('\n')
+		// 		break
+		// 	}
+		// }
+
+		switch choice {
+		case "1":
+			displayrepodetails(repo, client, 0, reader)
+		case "2":
+			displayrepodetails(repo, client, 1, reader)
+		case "3":
+			displayrepodetails(repo, client, 2, reader)
+		case "4":
+			displayrepodetails(repo, client, 3, reader)
+		case "5":
+			displayrepodetails(repo, client, 4, reader)
+		case "6":
+			displayrepodetails(repo, client, 5, reader)
+		case "7":
+			displayrepodetails(repo, client, 6, reader)
+		case "8":
+			displayrepodetails(repo, client, 7, reader)
+		case "9":
+			displayrepodetails(repo, client, 8, reader)
+		default:
+			fmt.Println("Wrong input please retype correctly")
 		}
 	}
 }

@@ -19,7 +19,7 @@ var (
 
 // listmyrepoCmd represents the listmyrepo command
 var listmyrepoCmd = &cobra.Command{
-	Use:   "listmyrepo",
+	Use:   "listMyRepo",
 	Short: "a command to list personal repos",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -85,7 +85,6 @@ to quickly create a Cobra application.`,
 			fmt.Printf("   URL: %s\n", *repo.HTMLURL)
 			fmt.Println()
 			time.Sleep(time.Millisecond * 500)
-
 		}
 
 	},
