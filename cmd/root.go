@@ -14,7 +14,23 @@ var rootCmd = &cobra.Command{
 	Use:   "cobraclip",
 	Short: "A Github CLI Tool",
 	Long: `
-	    Users Manual in markdown file
+	    This is CLI tool that help user to multiple operation like
+		- create a repo 
+		- list his personal repo
+		- search any organisation globally 
+		- search any repo globally 
+		- list issue's, pr's any many more 
+		- fork any repo 
+		- delete and update personal repos (such as title and decription)
+		- clone a repo along with exploring varies repos globally 
+		
+		all you have to do is genarate a token from your github repositroy 
+		by just once login you can use cobrclip cmmand from any terminal any time any where
+
+		and yes their are more features to be added.
+
+		also one last thing every command in is in lowercase
+
 	`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:

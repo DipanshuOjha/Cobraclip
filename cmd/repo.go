@@ -22,7 +22,7 @@ var repoCmd = &cobra.Command{
 		 5. List all your Repos
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("repo called")
+		fmt.Println("This self does not do anything try running command (cobraclip repo listmyrepo)")
 	},
 }
 

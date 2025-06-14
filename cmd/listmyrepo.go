@@ -24,7 +24,7 @@ var (
 
 // listmyrepoCmd represents the listmyrepo command
 var listmyrepoCmd = &cobra.Command{
-	Use:   "listMyRepo",
+	Use:   "listmyrepo",
 	Short: "a command to list personal repos",
 	Long: `
 	        We have the following flags for listing personal repository
@@ -127,5 +127,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	listmyrepoCmd.Flags().IntVarP(&cntforrepo, "count", "c", 10000000, "no. of repository")
+	listmyrepoCmd.Flags().IntVarP(&cntforrepo, "count", "c", 10000000, "no. of repository you want to list")
 }

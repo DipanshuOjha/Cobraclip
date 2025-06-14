@@ -25,7 +25,7 @@ var (
 
 // searchByOrgCmd represents the searchByOrg command
 var searchByOrgCmd = &cobra.Command{
-	Use:   "SearchByOrg",
+	Use:   "searchbyorg",
 	Short: "Search Github Repository by Organisation",
 	Long: `
 	   parameter that are to search repositories within an organisation
