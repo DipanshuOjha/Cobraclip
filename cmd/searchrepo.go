@@ -4,10 +4,15 @@ Copyright © 2025 Dipanshu Ojha
 package cmd
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/DipanshuOjha/cobraclip/functions/detaillog"
 	"github.com/DipanshuOjha/cobraclip/internal/config"
 	"github.com/google/go-github/v62/github"
 	"github.com/spf13/cobra"
@@ -79,6 +84,22 @@ to quickly create a Cobra application.`,
 		}
 
 		fmt.Println("If you didn't found your target repo try removing the count flag")
+
+		reader := bufio.NewReader(os.Stdin)
+
+		for {
+			fmt.Println("That all Repos any perticular repository you want to look? just tell me the index number you see:- ")
+			input, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Println("What you said i didnt read try again")
+				continue
+
+			}
+
+			num, _ := strconv.Atoi(strings.TrimSpace(input))
+
+			detaillog.ShowRepoDetail(repos.Repositories[num-1], client)
+		}
 
 	},
 }
