@@ -45,7 +45,7 @@ CobraClip is a powerful command-line tool designed to streamline your GitHub rep
 2. **Log In with CobraClip**:
    - Run:
      ```bash
-     cobraclip login --token <your-token>
+     cobraclip login
      ```
    - Your token is securely stored in Windows Credential Manager (or equivalent for other platforms).
 3. **Use CobraClip Commands**:
