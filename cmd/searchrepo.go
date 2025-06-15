@@ -90,7 +90,11 @@ var searchrepoCmd = &cobra.Command{
 
 			}
 
-			num, _ := strconv.Atoi(strings.TrimSpace(input))
+			num, err := strconv.Atoi(strings.TrimSpace(input))
+
+			if err != nil {
+				break
+			}
 
 			detaillog.ShowRepoDetail(repos.Repositories[num-1], client)
 		}
